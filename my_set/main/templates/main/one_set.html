@@ -4,6 +4,8 @@
 
 {% block content %}
 <div class="one-set-container">
+    <a href="{% url 'add-user-set' set.id %}" class="btn btn-outline-warning add-user-for-set">Add User</a>
+
     {% for project in projects %}
         <div class="row project_">
         

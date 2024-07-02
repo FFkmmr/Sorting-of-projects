@@ -1,0 +1,36 @@
+{% extends 'main/layout.html' %}
+
+{% block title %} Invitation link {% endblock %}
+
+{% block content %}
+    <div>
+        <br><br><br><br><br>
+        <h1 style="left: 20%; position: relative;">Share a set of projects</h1><br>
+        <a href="#" style="left: 20%; position: relative; font-size: 25px;" class="btn btn-outline-warning" onclick="copyToClipboard('http://127.0.0.1:8000/accept-invitation/{{ token }}'); return false;">Copy a link</a> <br><br><br>
+        <form action="{% url 'email_invitation' %}" method="post" style="left: 20%; position: relative;">
+            {% csrf_token %}
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <br><br>
+            <input type="hidden" id="link" name="link" value="http://127.0.0.1:8000/accept-invitation/{{ token }}">
+            <br><br>
+            <input type="submit" value="Send Message" class="btn btn-success">
+        </form>
+
+
+        <a href="/" class="btn btn-outline-secondary back-btn-sets">
+            <span class="material-symbols-outlined back-btn">undo</span>
+        </a>
+    </div>
+    <script>
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('The invitation link has been copied!');
+        }
+    </script>
+{% endblock %}

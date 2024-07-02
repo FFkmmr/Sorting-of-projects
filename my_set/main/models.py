@@ -34,7 +34,6 @@ class Project(models.Model):
     industries = models.ManyToManyField(Industry)
     is_private = models.BooleanField(default=False)
     sets = models.ManyToManyField('MySets', blank=True, related_name='projects')
-    allowed_for = models.ManyToManyField(User, related_name='allowed_projects', blank=True)
 
     def __str__(self):
         return self.title

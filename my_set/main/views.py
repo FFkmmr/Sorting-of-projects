@@ -3,14 +3,18 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from .models import Project, Technology, Industry, MySets, User
+from .models import Project, Technology, Industry, MySets
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from .forms import CreateUserForm, CreateProjectForm, CreateProjectSet
 from django.db import transaction
+from django.http import HttpResponseForbidden
 import json
 import csv
+import cryptocode
+import requests
+import base64
 
 def register_page(request):
     if request.user.is_authenticated:
@@ -78,7 +82,7 @@ def project_filter_view(request):
             filters['is_private'] = True
 
         projects = Project.objects.filter(**filters)
-        sets = MySets.objects.all()
+        sets = MySets.objects.filter(**filters)
         context = {
             'sets': sets,
             'projects': projects,
@@ -189,6 +193,9 @@ def add_set(request):
             set.user = request.user
             set.save()
             form.save_m2m()
+
+            generate_invitation_token(set.id, 'set', request.user.id)
+
             return redirect('home')
     else:
         form = CreateProjectSet()
@@ -209,39 +216,56 @@ def edit_project_set(request, set_id):
         'form': form,
     }
     return render(request, 'edit_set.html', context)
+
 @login_required(login_url='login')
 def project_set(request, set_id):
-    set_instance = get_object_or_404(MySets, id=set_id, user=request.user)
-    projects = set_instance.projects.filter(user=request.user)
-    handler = set_instance.name
+    set_instance = get_object_or_404(MySets, id=set_id)
+    if set_instance.is_private and set_instance.user != request.user and request.user not in set_instance.allowed_for.all():
+        return HttpResponseForbidden("You do not have access to this set.")
 
+    projects = set_instance.projects.all()
     context = {
         'projects': projects,
         'set': set_instance,
-        'handler': handler,
+        'handler': set_instance.name,
     }
     return render(request, "main/one_set.html", context)
-def success(request):
-    return render(request, 'main/success.html')
 
-def error(request):
-    return render(request, 'main/error.html')
+def generate_invitation_token(request, set_id):
+    user_id = request.user.id
+    secret_key = 'django-insecure-svwex%*s7dnpav#)etq79gq4f+euje83rtwk9wduj=0f!l6m1-m'
+    data = {'user_id': user_id, 'set_id': set_id}
+    json_data = json.dumps(data)
+    encrypted_data = cryptocode.encrypt(json_data, secret_key)
+    token_base64 = base64.urlsafe_b64encode(encrypted_data.encode()).decode()
+    return render(request, 'share_link.html', {'token': token_base64})
 
+def accept_invitation(request, token):
+    try:
+        token = base64.urlsafe_b64decode(token).decode()
+        decrypted_data = cryptocode.decrypt(token, 'django-insecure-svwex%*s7dnpav#)etq79gq4f+euje83rtwk9wduj=0f!l6m1-m')
+        data = json.loads(decrypted_data)
+        set_id = data['set_id']
+        set_instance = get_object_or_404(MySets, id=set_id)
+        set_instance.allowed_for.add(request.user)
+        return redirect('set', set_id=set_id)
+    except Exception as e:
+        return HttpResponseForbidden(e)
 
+def send_message(request, ):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        link = request.POST.get('link')
+        email_send(email, link)
+        return redirect('home')
 
+    return render(request, 'template.html')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def email_send(email, link):
+  	return requests.post(
+  		"https://api.mailgun.net/v3/sandbox4694cce68b6743b6ab979c5af9994e42.mailgun.org/messages",
+  		auth=("api", "eaea9772c8e26ff0a5966571ed60336f-623e10c8-6896f4ca"),
+  		data={"from": "mitsuhanocreations@gmail.com",
+  			"to": [email],
+  			"subject": "Hello",
+  			"text": f"Access for set: {link}"})

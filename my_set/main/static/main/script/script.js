@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var activeButton = document.querySelector('.custom-btn.active');
         return activeButton.getAttribute('data-value');
     }
+
     industryCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateProjects);
     });

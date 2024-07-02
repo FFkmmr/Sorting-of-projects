@@ -316,7 +316,7 @@ i .fa-user {
 }
 .one-set-container {
     position: absolute;
-    top: 80px;
+    top: 65px;
     overflow: auto;
     height: 100%;
     width: 100%;
@@ -348,4 +348,12 @@ i .fa-user {
     position: relative;
     width: 40px;
     height: 40px;
+}
+.add-user-for-set {
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    width: 5%;
+    height: 40px;
+    z-index: 100;
 }

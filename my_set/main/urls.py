@@ -14,7 +14,7 @@ urlpatterns = [
     path('add-project-set', views.add_set, name='add_set'),
     path('set/<int:set_id>/', views.project_set, name='set'),
     path('edit-set/<int:set_id>/', views.edit_project_set, name='edit_set'),
-    path('success/', views.success, name='success'),
-    path('error/', views.error, name='error'),
-
+    path('accept-invitation/<str:token>/', views.accept_invitation, name='accept_invitation'),
+    path('add-user-for-set/<int:set_id>/', views.generate_invitation_token, name='add-user-set'),
+    path('send_message/', views.send_message, name='email_invitation'),
 ]
