@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const technologyList = document.getElementById('technologyList');
     const industryCheckboxes = document.querySelectorAll('.industry-checkbox');
     const technologyCheckboxes = document.querySelectorAll('.technology-checkbox');
+    const buttChose = document.querySelectorAll('.butt-chose');
 
     const industries = Array.from(industryList.getElementsByTagName('li'));
     const technologies = Array.from(technologyList.getElementsByTagName('li'));
@@ -58,11 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
     resetIndustryFilterBtn.addEventListener('click', () => resetFilter(industryFilterInput, industries));
     resetTechnologyFilterBtn.addEventListener('click', () => resetFilter(technologyFilterInput, technologies));
 
-    var privateButton = document.querySelector('.custom-btn[data-value="Private"]');
-    if (privateButton) {
-        privateButton.classList.add('active');
-    }
-
+    var publicButton = document.querySelector('.custom-btn[data-value="Public"]');
+    if (publicButton) {
+        publicButton.classList.add('active');  }
     var buttons = document.querySelectorAll('.custom-btn');
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
@@ -74,46 +73,55 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    function getActiveButtonValue() {
+        var activeButton = document.querySelector('.custom-btn.active');
+        return activeButton.getAttribute('data-value');
+    }
     industryCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateProjects);
     });
     technologyCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateProjects);
     });
+    buttChose.forEach(checkbox => {
+        checkbox.addEventListener('click', updateProjects);
+    });
 
     function updateProjects() {
-    const industryCheckboxes = document.querySelectorAll('.industry-checkbox');
-    const technologyCheckboxes = document.querySelectorAll('.technology-checkbox');
+        const industryCheckboxes = document.querySelectorAll('.industry-checkbox');
+        const technologyCheckboxes = document.querySelectorAll('.technology-checkbox');
+        var activeButtonValue = getActiveButtonValue()
 
-    const selectedIndustries = Array.from(industryCheckboxes)
-                                    .filter(checkbox => checkbox.checked)
-                                    .map(checkbox => checkbox.value);
-    const selectedTechnologies = Array.from(technologyCheckboxes)
-                                      .filter(checkbox => checkbox.checked)
-                                      .map(checkbox => checkbox.value);
+        const selectedIndustries = Array.from(industryCheckboxes)
+                                        .filter(checkbox => checkbox.checked)
+                                        .map(checkbox => checkbox.value);
+        const selectedTechnologies = Array.from(technologyCheckboxes)
+                                        .filter(checkbox => checkbox.checked)
+                                        .map(checkbox => checkbox.value);
 
-    const projectListUrl = "/project_list/";         
-    fetch(projectListUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({
-            industries: selectedIndustries,
-            technologies: selectedTechnologies
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        const projectContainer = document.getElementById('projects');
-        projectContainer.innerHTML = data.html;
-    })
-    .catch(error => console.error('Error:', error));
-}
+                                        
+        const projectListUrl = "/project_list/";
+        fetch(projectListUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({
+                industries: selectedIndustries,
+                technologies: selectedTechnologies,
+                active_button: activeButtonValue,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const projectContainer = document.getElementById('projects');
+            projectContainer.innerHTML = data.html;
 
-document.querySelectorAll('.industry-checkbox, .technology-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', updateProjects);
+            })
+        .catch(error => console.error('Error:', error));
+    }
+
+
 });
 
-});

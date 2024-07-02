@@ -3,7 +3,7 @@
 {% block title %} Import CSV {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container project-cont">
     <div class="row">
         <div class="col-md-12" style="margin-bottom: 180px;">
             <h1>Change Project </h1>
@@ -61,7 +61,27 @@
                         {{ form.new_industries }}
                     </div>
                 </div>
-
+                <div class="input-group mb-2 block_">
+                    <div class="input-group-append">
+                        <span class="input-group-text material-symbols-outlined" style="float: left;">Widgets</span>
+                        <h5>Enter your sets:</h5><br>
+                    </div>
+                    <div class="add-block-form">
+                    {% for set in form.sets %}
+                        {{ set }}
+                        {% if forloop.counter|divisibleby:5 and not forloop.last %}
+                            <span><br></span>
+                        {% endif %}
+                     {% endfor %}
+                    </div>
+                </div> <br>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <span class="material-symbols-outlined">lock</span>
+                    </div>
+                    <h5>Private_</h5> 
+                    {{form.is_private}}
+                </div>
                 <button type="submit" class="btn btn-primary btn-sm" value=""> Save</button>
             </form>
         </div>

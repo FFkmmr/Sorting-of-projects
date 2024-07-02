@@ -3,7 +3,7 @@
 {% block title %} MySet {% endblock %}
 
 {% block content %}
-<div class="row">
+<div class="row main-index">
     <div class="col-lg-2">
         <div class="p-3 border bg-light container-left-sort clearfix">
             <div class="industries">
@@ -44,21 +44,21 @@
         <div class="border bg-light container-main">   
             <div class="nav-2">
                 <div class="btn-group-toggle-1">
-                    <button type="button" class="btn btn-outline-dark custom-btn" data-value="Private">Private</button>
-                    <button type="button" class="btn btn-outline-dark custom-btn" data-value="Public">Public</button>
-                    <button type="button" class="btn btn-outline-dark custom-btn" data-value="MySets">My Sets</button>
+                    <button type="button" class="btn btn-outline-dark custom-btn butt-chose" data-value="Public">Public</button>
+                    <button type="button" class="btn btn-outline-dark custom-btn butt-chose" data-value="Private">Private</button>
+                    <button type="button" class="btn btn-outline-dark custom-btn butt-chose" data-value="MySets">My Sets</button>
                 </div>
                 <div class="btn-group-toggle-2">
                     <a href="{% url 'add_project' %}" type="button" class="btn btn-outline-primary" data-value="Add project">Add project</a>
                     <a href="{% url 'import_csv' %}" type="button" class="btn btn-outline-success" data-value="Upload .csv">Upload .csv</a>
-                    <a href="/" type="button" class="btn btn-outline-warning" data-value="Add new set">Add new set</a>
+                    <a href="{% url 'add_set' %}" type="button" class="btn btn-outline-warning" data-value="Add new set">Add new set</a>
                 </div>
                 <div>
-                    <input type="text" class="filter-of-container-main" placeholder="Search...">
+                    <input id="search" type="text" class="filter-of-container-main" placeholder="Search...">
                     <button type="button" class="btn btn-outline-secondary search_" data-value="Search">Search</button>
                 </div>
             </div>
-
+            
             <div id="projects">
                 {% include 'main/projects.html' %}
             </div>

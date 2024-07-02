@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from .models import Project, Technology, Industry
+from .models import Project, Technology, Industry, MySets, User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
-from .forms import CreateUserForm, CreateProjectForm
+from .forms import CreateUserForm, CreateProjectForm, CreateProjectSet
 from django.db import transaction
 import json
 import csv
@@ -62,6 +62,7 @@ def project_filter_view(request):
             data = json.loads(request.body)
             selected_industries = data.get('industries', [])
             selected_technologies = data.get('technologies', [])
+            active_button = data.get('active_button', [])
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
@@ -71,13 +72,22 @@ def project_filter_view(request):
             filters['industries__name__in'] = selected_industries
         if selected_technologies:
             filters['technologies__name__in'] = selected_technologies
+        if active_button == 'Public':
+            filters['is_private'] = False
+        elif active_button == 'Private':
+            filters['is_private'] = True
 
         projects = Project.objects.filter(**filters)
+        sets = MySets.objects.all()
         context = {
+            'sets': sets,
             'projects': projects,
         }
         print(filters)
-        html = render_to_string('main/projects.html', context)
+        if active_button == 'MySets':
+            html = render_to_string('main/sets.html', context)
+        else:
+            html = render_to_string('main/projects.html', context)
         return JsonResponse({'html': html})
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
@@ -169,5 +179,69 @@ def edit_project(request, project_id):
     else:
         form = CreateProjectForm(instance=project)
     return render(request, 'edit_project.html', {'form': form})
+
+@login_required(login_url='login')
+def add_set(request):
+    if request.method == 'POST':
+        form = CreateProjectSet(request.POST)
+        if form.is_valid():
+            set = form.save(commit=False)
+            set.user = request.user
+            set.save()
+            form.save_m2m()
+            return redirect('home')
+    else:
+        form = CreateProjectSet()
+    return render(request, 'add_set.html', {'form': form})
+
+@login_required(login_url='login')
+def edit_project_set(request, set_id):
+    set_instance = get_object_or_404(MySets, id=set_id, user=request.user)
+    if request.method == 'POST':
+        form = CreateProjectSet(request.POST, instance=set_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = CreateProjectSet(instance=set_instance)
+    context = {
+        'set': set_instance,
+        'form': form,
+    }
+    return render(request, 'edit_set.html', context)
+@login_required(login_url='login')
+def project_set(request, set_id):
+    set_instance = get_object_or_404(MySets, id=set_id, user=request.user)
+    projects = set_instance.projects.filter(user=request.user)
+    handler = set_instance.name
+
+    context = {
+        'projects': projects,
+        'set': set_instance,
+        'handler': handler,
+    }
+    return render(request, "main/one_set.html", context)
+def success(request):
+    return render(request, 'main/success.html')
+
+def error(request):
+    return render(request, 'main/error.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

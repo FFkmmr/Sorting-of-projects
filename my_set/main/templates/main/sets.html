@@ -1,0 +1,8 @@
+<div class="row main-sets">
+{% for set in sets %}
+    <a href="{% url 'set' set.id %}" class="col-md-3 sets-block">
+        <span>{{ set.name }}</span>
+        <a href="{% url 'edit_set' set.id %}" class="edit-set-btn btn btn-secondary" style="left: -21px;"><span class="material-symbols-outlined">edit</span></a>
+    </a>    
+{% endfor %}  
+</div>

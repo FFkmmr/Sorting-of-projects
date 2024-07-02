@@ -1,9 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from .models import Project
+from .models import Project, MySets
 from django import forms
-from .models import Project, Technology, Industry
+from .models import Project
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -21,21 +21,29 @@ class CreateUserForm(UserCreationForm):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         for field_name, placeholder in self.placeholders.items():
             self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
-
 class CreateProjectForm(ModelForm):
     new_technologies = forms.CharField(required=False)
     new_industries = forms.CharField(required=False)
     class Meta:
         model = Project
-        fields = ['title', 'url', 'technologies', 'description', 'industries']
+        fields = ['title', 'url', 'technologies', 'description', 'industries','sets','is_private']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Enter project title...'}),
             'url': forms.URLInput(attrs={'placeholder': 'Enter project link...'}),
             'description': forms.Textarea(attrs={'placeholder': 'Enter project description...', 'rows': 4}),
             'technologies': forms.CheckboxSelectMultiple(),
             'industries': forms.CheckboxSelectMultiple(),
-            'new_technologies':forms.TextInput(attrs={'placeholder': 'Enter new technologies, separated by commas...',
+            'new_technologies': forms.TextInput(attrs={'placeholder': 'Enter new technologies, separated by commas...',
             'class': 'wide-input'}),
-            'new_idustries':forms.TextInput(attrs={'placeholder': 'Enter new industries, separated by commas...',
+            'new_idustries': forms.TextInput(attrs={'placeholder': 'Enter new industries, separated by commas...',
             'class': 'wide-input'}),
+            'sets': forms.CheckboxSelectMultiple(),
         }
+class CreateProjectSet(ModelForm):
+    class Meta:
+        model = MySets
+        fields = ['name','is_private']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Enter set name...'}),
+        }
+        

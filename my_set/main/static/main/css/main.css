@@ -10,6 +10,10 @@ ul {
     margin-top: 15px;
     padding-left: 10px;
 }
+.container {
+    width: 100%;
+    height: 100%;
+}
 .user_card {
     width: 350px;
     margin-top: auto;
@@ -103,7 +107,7 @@ i .fa-user {
     top: 50%;
     transform: translate(0%, -50%);
 }
-.row {
+.main-index {
     position: relative;
     overflow: hidden;
     top: 100px;
@@ -147,7 +151,7 @@ i .fa-user {
 .nav-2 {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 100;
     height: 140px;
     background-color: #F8F9FA;
 }
@@ -265,15 +269,18 @@ i .fa-user {
     width: 400px;
 }
 .delete-project-button {
-    position: absolute;
+    position: relative;
+    float: left;
     z-index: 1;
-    right: -89%;
-    top: 3%;
+    right: -85%;
+    top: 5%;
 }   
 .edit-project-button {
-    position: absolute;
+    position: relative;
+    float: left;
+    z-index: 1;
     right: -83%;
-    top: 3%;
+    top: 5%;
 }
 .warning-h1 {
     position: relative;
@@ -290,4 +297,55 @@ i .fa-user {
     height: 100%;
     width: 100%;
     overflow: auto;
+}
+.sets-block {
+    margin: 20px;
+    text-align: center;
+    font-size: 23px;
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    color: #000000;
+    height: 100px;
+}
+.sets-block span {
+    position: relative;
+    top: 25%;
+}
+.main-sets {
+    justify-content: center;
+}
+.one-set-container {
+    position: absolute;
+    top: 80px;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+.project-cont {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    overflow: auto; 
+}
+.back-btn-sets {
+    position: absolute;
+    background-color:#b2b0bd;
+    top: 83%;
+    left: 5%;
+    width: 100px;
+    height: 50px;
+}
+.back-btn {
+    color: white;
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    font-size: 35px;
+}
+.edit-set-btn {
+    position: relative;
+    width: 40px;
+    height: 40px;
 }
