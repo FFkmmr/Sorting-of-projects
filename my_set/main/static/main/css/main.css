@@ -1,9 +1,78 @@
-body {
-    background-color: rgb(255, 255, 255); 
+html {
+    overflow: hidden;
 }
 a {
     color: rgb(88, 68, 121);
     text-decoration: none;
+}
+ul {
+    list-style-type: none;
+    margin-top: 15px;
+    padding-left: 10px;
+}
+.container {
+    width: 100%;
+    height: 100%;
+}
+.user_card {
+    width: 350px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: #FF7400;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+}
+.form_container {
+    margin-top: 20px;
+}
+#form-title{
+    color: #fff;
+}
+.login_btn {
+    width: 100%;
+    background: #FFB173 !important;
+    color: white !important;
+}
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+.login_container {
+    padding: 0 2rem;
+}
+.input-group-text {
+    background: #f7ba5b !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.input_user,
+.input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+.error-heading {
+    color: rgb(3, 2, 2);
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.error-text {
+    color: rgb(0, 0, 0);
+    margin-left: 20px;
+}
+.alert-warning {
+    background-color: #ffd2ad;
+    margin-top: 15px;
+}
+i .fa-user {
+    height: 50px;
 }
 .menu {
     position: fixed;
@@ -12,6 +81,8 @@ a {
     height: 7vh;
     min-height: 65px;
     width: 100vw;
+    top: 0px;
+    z-index: 100;
 }
 .menu-head span {
     position: absolute;
@@ -19,10 +90,270 @@ a {
     top: 50%;
     transform: translate(0%, -50%);
 }
+.menu-head .home {
+    text-decoration: none;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    left: 18vw;
+}
 .menu-head a {
     position: absolute;
     font-size: 20px;
     right: 20%;
     top: 50%;
     transform: translate(0%, -50%);
+}
+.main-index {
+    position: relative;
+    overflow: hidden;
+    top: 100px;
+    justify-content: center;
+}
+.container-left-sort {
+    height: 88vh;
+}
+.container-left-sort input {
+    font-size: 15px;
+    width: 65%;
+    height: 38px;
+    margin-left: 0px;
+    
+}
+.container-left-sort button {
+    position: relative;
+    border-radius: 0%;
+}
+.industries,
+.technologies {
+    max-height: 50%;
+    height: 50%;
+    overflow-y: auto;
+}.industries ul input,
+.technologies ul input {
+    float: left;
+    height: 15px;
+    width: 15px;
+    top: 5px;
+    position: relative;
+    margin-right: 5px;
+}
+.nav {
+    position: sticky;
+    top: 0;
+    padding: 10px; 
+    z-index: 1;
+    background-color: #F8F9FA;
+}
+.nav-2 {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 140px;
+    background-color: #F8F9FA;
+}
+.num {
+    position: absolute;
+    right: 10px;
+}
+#industryList li,
+#technologyList li {
+    position: relative;
+}
+.container-main {
+    position: relative;
+    height: 88vh;
+    overflow: auto;
+    padding: 0px 10px;
+}
+.container-main button {
+    border-radius: 5px;
+}
+.btn-group-toggle-1 {
+    position: absolute;
+    display: flex;
+    float: left;
+    top: 20px;
+}
+.btn-group-toggle-2 {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.filter-of-container-main {
+    position: relative;
+    top: 60px;
+    margin: 20px 0px;
+    width: 90%;
+    height: 38px;
+    padding-left: 15px;
+}
+.search_ {
+    position: absolute;
+    top: 80px;
+    right: 2.6%;
+}
+.custom-btn {
+    margin-right: 0;
+}
+.custom-btn:last-child {
+    margin-right: 0;
+}
+.project_ {
+    top: 30px;
+    width: 100%;
+    min-height: 150px;
+    box-sizing: border-box;
+    margin: 10px 0px;
+    border-top: 2px solid rgba(128, 128, 128, 0.5); 
+    border-bottom: 2px solid rgba(128, 128, 128, 0.5);    
+}
+.box {
+    min-height: 30px;
+    padding: 5px 30px;
+}
+.title_ {
+    padding-top: 20px;
+    font-weight: 700;
+}
+.industries_,
+.technologies_ {
+    color: rgb(73, 71, 156);
+}
+.url_ {
+    padding-bottom: 30px;
+    color: black;
+}
+.import-csv {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+}
+
+.import-csv h1 {
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    font-size: 70px;
+    transform: translate(-50%, -50%);
+}
+.import-csv form {
+    position: absolute;
+    top: 38%;
+    left: 33%;
+    font-size: 17px;
+    transform: translate(-50%, -50%);
+}
+.import-csv form button {
+    position: absolute;
+    left: 90%;
+    color: white;
+}
+.block_ {
+    display: block;   
+}
+.block_ h5 {
+    width: 50%;
+}
+.add-block-form {
+    width: 60%;
+    overflow: auto;
+}
+.add-input-block {
+    width: 150px;
+}
+.wide-input {
+    width: 400px;
+}
+.delete-project-button {
+    position: relative;
+    float: left;
+    z-index: 1;
+    right: -85%;
+    top: 5%;
+}   
+.edit-project-button {
+    position: relative;
+    float: left;
+    z-index: 1;
+    right: -83%;
+    top: 5%;
+}
+.warning-h1 {
+    position: relative;
+    left: 10%;
+    top: 50px;
+}
+.warning-form {
+    position: relative;
+    left: 15%;
+    top: 150px;
+    font-size: 30px;
+}
+.edit-project {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+.sets-block {
+    margin: 20px;
+    text-align: center;
+    font-size: 23px;
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    color: #000000;
+    height: 100px;
+}
+.sets-block span {
+    position: relative;
+    top: 25%;
+}
+.main-sets {
+    justify-content: center;
+}
+.one-set-container {
+    position: absolute;
+    top: 65px;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+.project-cont {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    overflow: auto; 
+}
+.back-btn-sets {
+    position: absolute;
+    background-color:#b2b0bd;
+    top: 83%;
+    left: 5%;
+    width: 100px;
+    height: 50px;
+}
+.back-btn {
+    color: white;
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    font-size: 35px;
+}
+.edit-set-btn {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+.add-user-for-set {
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    width: 5%;
+    height: 40px;
+    z-index: 100;
 }

@@ -1,0 +1,17 @@
+{% extends 'main/layout.html' %}
+
+{% block title %} Import CSV {% endblock %}
+
+{% block content %}
+<div class="import-csv">
+    <h1>Import CSV</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="csv_file" accept=".csv" required>
+        <button type="submit" class="btn bg-success">Upload</button>
+    </form>
+</div>
+<a href="/" class="btn btn-outline-secondary back-btn-sets">
+    <span class="material-symbols-outlined back-btn">undo</span>
+</a>
+{% endblock %}

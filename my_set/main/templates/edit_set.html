@@ -1,0 +1,33 @@
+{% extends 'main/layout.html' %}
+
+{% block title %} Edit {% endblock %}
+
+{% block content %}
+<div class="container project-cont" style="top: 20%; left: 20%;">
+    <div class="row">
+        <div class="col-md-12">
+            <h1  style="font-size: 70px; margin-bottom: 50px;">Edit Set - {{ set.name }}</h1>
+            <form action="" method='POST' style="left: 3%; position: relative;">
+                {% csrf_token %}
+                <div class="input-group mb-3" style="left: 3%;">
+                    <div class="input-group-append">    
+                        <span class="input-group-text material-symbols-outlined">Title</span>
+                    </div>
+                    {{form.name }}
+                </div><br>
+                <div class="input-group mb-2" style="left: 3%;">
+                    <div class="input-group-append">
+                        <span class="material-symbols-outlined">lock</span>
+                    </div>
+                    <h5>Private_</h5> 
+                    {{form.is_private}}
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm" style="left: 3%; top: 10px; position: relative;" value=""> Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+<a href="/" class="btn btn-outline-secondary back-btn-sets">
+    <span class="material-symbols-outlined back-btn">undo</span>
+</a>
+{% endblock %}
