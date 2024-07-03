@@ -81,8 +81,13 @@ def project_filter_view(request):
         elif active_button == 'Private':
             filters['is_private'] = True
 
+        sets_filters = {
+            'user': request.user,
+        }
+
         projects = Project.objects.filter(**filters)
-        sets = MySets.objects.filter(**filters)
+        sets = MySets.objects.filter(**sets_filters)
+
         context = {
             'sets': sets,
             'projects': projects,
