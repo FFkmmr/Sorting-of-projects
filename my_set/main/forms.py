@@ -39,6 +39,8 @@ class CreateProjectForm(ModelForm):
             'class': 'wide-input'}),
             'sets': forms.CheckboxSelectMultiple(),
         }
+
+        
 class CreateProjectSet(ModelForm):
     class Meta:
         model = MySets

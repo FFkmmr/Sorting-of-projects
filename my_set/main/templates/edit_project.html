@@ -1,13 +1,13 @@
 {% extends 'main/layout.html' %}
 
-{% block title %} Import CSV {% endblock %}
+{% block title %} Edit project {% endblock %}
 
 {% block content %}
 <div class="container project-cont">
     <div class="row">
         <div class="col-md-12" style="margin-bottom: 180px;">
-            <h1>Change Project </h1>
-            <form action="" method='POST'>
+            <h1 style="position: relative; left: 18%; margin-bottom: 30px;">Change Project </h1>
+            <form action="" method='POST' style="position: relative; left: 20%;">
                 {% csrf_token %}
                 <div class="input-group mb-3">
                     <div class="input-group-append">    
@@ -87,4 +87,7 @@
         </div>
     </div>
 </div>
+<a href="/" class="btn btn-outline-secondary back-btn-sets">
+    <span class="material-symbols-outlined back-btn">undo</span>
+</a>
 {% endblock %}
