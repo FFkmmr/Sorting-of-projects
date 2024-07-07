@@ -28,9 +28,9 @@ class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     url = models.CharField(max_length=100)
-    technologies = models.ManyToManyField(Technology)
+    technologies = models.ManyToManyField(Technology, blank=True)
     description = models.TextField()
-    industries = models.ManyToManyField(Industry)
+    industries = models.ManyToManyField(Industry, blank=True)
     is_private = models.BooleanField(default=False)
     sets = models.ManyToManyField('MySets', blank=True, related_name='projects')
 

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -17,4 +17,5 @@ urlpatterns = [
     path('accept-invitation/<str:token>/', views.accept_invitation, name='accept_invitation'),
     path('add-user-for-set/<int:set_id>/', views.generate_invitation_token, name='add-user-set'),
     path('send_message/', views.send_message, name='email_invitation'),
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]

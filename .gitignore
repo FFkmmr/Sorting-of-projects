@@ -1,3 +1,6 @@
 venv
 db.sqlite3
 __pycache__
+migrations
+my_set/main/service.py
+my_set/my_set/service.py
