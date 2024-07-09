@@ -83,17 +83,18 @@ def index(request: HttpRequest) -> HttpResponse:
 @login_required(login_url='login')
 def project_filter_view(request: HttpRequest) -> JsonResponse:
     if request.method == 'POST':
-
         try:
             data = json.loads(request.body)
             selected_industries = data.get('industries', [])
             selected_technologies = data.get('technologies', [])
             active_button = data.get('active_button', [])
+            input_val = data.get('input_val', [])
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         filters = {'user': request.user}
         
+
         if selected_industries:
             filters['industries__name__in'] = selected_industries
         if selected_technologies:
@@ -106,15 +107,18 @@ def project_filter_view(request: HttpRequest) -> JsonResponse:
         sets_filters = {
             'user': request.user,
         }
-
-        projects = Project.objects.filter(**filters)
-        sets = MySets.objects.filter(**sets_filters)
+        projects = Project.objects.filter(**filters).distinct()
+        sets = MySets.objects.filter(**sets_filters).distinct()
+        
+        if input_val:
+            for term in input_val.split():
+                projects = projects.filter(title__icontains=term.strip())
 
         context = {
             'sets': sets,
             'projects': projects,
         }
-        print(filters)
+        
         if active_button == 'MySets':
             html = render_to_string('main/sets.html', context)
         else:

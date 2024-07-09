@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const technologyFilterInput = document.getElementById('technologyFilter');
     const resetIndustryFilterBtn = document.getElementById('resetIndustryFilterBtn');
     const resetTechnologyFilterBtn = document.getElementById('resetTechnologyFilterBtn');
+    const searchInput = document.getElementById('search');
     const industryList = document.getElementById('industryList');
     const technologyList = document.getElementById('technologyList');
     const industryCheckboxes = document.querySelectorAll('.industry-checkbox');
@@ -12,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const industries = Array.from(industryList.getElementsByTagName('li'));
     const technologies = Array.from(technologyList.getElementsByTagName('li'));
-    
 
     function getCookie(name) {
         let cookieValue = null;
@@ -101,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+    updateProjects()
+    searchInput.addEventListener('input', updateProjects );
     industryCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateProjects);
     });
@@ -115,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateProjects() {
         const industryCheckboxes = document.querySelectorAll('.industry-checkbox');
         const technologyCheckboxes = document.querySelectorAll('.technology-checkbox');
+        const inputValue = document.getElementById('search').value;
         var activeButtonValue = getActiveButtonValue()
 
         const selectedIndustries = Array.from(industryCheckboxes)
@@ -133,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
             body: JSON.stringify({
+                input_val: inputValue,
                 industries: selectedIndustries,
                 technologies: selectedTechnologies,
                 active_button: activeButtonValue,
@@ -142,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             const projectContainer = document.getElementById('projects');
             projectContainer.innerHTML = data.html;
-
             })
         .catch(error => console.error('Error:', error));
     }
