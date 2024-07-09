@@ -51,9 +51,23 @@ class CreateProjectSet(ModelForm):
         
         
 class PasswordResetRequestForm(forms.Form):
-    email = forms.EmailField(label="Email")
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Email',
+        })
+    )
 
 class SetPasswordForm(DjangoSetPasswordForm):
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Enter new password'
+        })
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Confirm new password'
+        })
+    )
     class Meta:
         model = User
         fields = ['new_password1', 'new_password2']
