@@ -1,19 +1,30 @@
+import base64
+import json
+import requests
+
+
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
-from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import render_to_string
-from .models import Project, Technology, Industry, MySets
+from django.http import HttpResponse, JsonResponse, HttpRequest, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse, HttpRequest
-from django.contrib import messages
-from .forms import CreateUserForm, CreateProjectForm, CreateProjectSet
-from django.http import HttpResponseForbidden
-import json
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+from .forms import (
+    CreateUserForm,
+    CreateProjectForm,
+    CreateProjectSet,
+    PasswordResetRequestForm,
+    SetPasswordForm,
+)
+from .models import Project, Technology, Industry, MySets
+from .service import mailgun_api, email_from, import_csv, secret_key, email_message, send_mail, generate_token
 import cryptocode
-import requests
-import base64
-from .service import api, email_from, import_csv, secret_key, email_message
+
 
 
 def register_page(request: HttpRequest) -> HttpResponse:
@@ -69,7 +80,6 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, 'main/index.html', context)
 
 
-@csrf_exempt
 @login_required(login_url='login')
 def project_filter_view(request: HttpRequest) -> JsonResponse:
     if request.method == 'POST':
@@ -255,7 +265,7 @@ def generate_invitation_token(request: HttpRequest, set_id: int) -> HttpResponse
 def accept_invitation(request: HttpRequest, token: str) -> HttpResponse:
     try:
         token = base64.urlsafe_b64decode(token).decode()
-        decrypted_data = cryptocode.decrypt(token, 'django-insecure-svwex%*s7dnpav#)etq79gq4f+euje83rtwk9wduj=0f!l6m1-m')
+        decrypted_data = cryptocode.decrypt(token, secret_key)
         data = json.loads(decrypted_data)
         set_id = data['set_id']
         set_instance = get_object_or_404(MySets, id=set_id)
@@ -275,4 +285,48 @@ def send_message(request: HttpRequest) -> HttpResponse:
 
 
 def email_send(email: str, link: str) -> requests.Response:
-  	return email_message(email, link, email_from, api)
+  	return email_message(email, link, email_from, mailgun_api)
+
+
+def change_password_message(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.get(email=email)
+            uidb64 = urlsafe_base64_encode(force_bytes(user.id))
+            token = generate_token(user.id)
+
+            reset_url = request.build_absolute_uri(f'/reset/{uidb64}/{token}/')
+
+            send_mail(
+                'Password Reset Request',
+                f'Click the link to reset your password: {reset_url}',
+                email_from,
+                [email],
+                mailgun_api,
+            )
+            return redirect('login')
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, 'change_password_message.html', {'form': form})
+
+
+def password_reset_confirm(request: HttpRequest, uidb64: str, token: str) -> HttpResponse:
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+    
+    if user is not None:
+        if request.method == 'POST':
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                return redirect('login')
+        else:
+            form = SetPasswordForm(user)
+        return render(request, 'password_reset_confirm.html', {'form': form})
+    else:
+        return render(request, 'login.html')

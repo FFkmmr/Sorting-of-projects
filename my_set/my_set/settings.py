@@ -1,5 +1,5 @@
 from pathlib import Path
-from .service import user, password, social_auth_github_key, social_auth_github_secret, linkedin_oauth2_key, linkedin_secret
+from .service import user, password, social_auth_github_key, social_auth_github_secret, linkedin_oauth2_key, linkedin_secret, mailgun_domen, mailgun_api, host_email
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

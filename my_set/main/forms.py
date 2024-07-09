@@ -1,9 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import SetPasswordForm as DjangoSetPasswordForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from .models import Project, MySets
 from django import forms
-from .models import Project
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -21,6 +21,7 @@ class CreateUserForm(UserCreationForm):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         for field_name, placeholder in self.placeholders.items():
             self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
+
 class CreateProjectForm(ModelForm):
     new_technologies = forms.CharField(required=False)
     new_industries = forms.CharField(required=False)
@@ -39,8 +40,7 @@ class CreateProjectForm(ModelForm):
             'class': 'wide-input'}),
             'sets': forms.CheckboxSelectMultiple(),
         }
-
-        
+     
 class CreateProjectSet(ModelForm):
     class Meta:
         model = MySets
@@ -49,3 +49,11 @@ class CreateProjectSet(ModelForm):
             'name': forms.TextInput(attrs={'placeholder': 'Enter set name...'}),
         }
         
+        
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label="Email")
+
+class SetPasswordForm(DjangoSetPasswordForm):
+    class Meta:
+        model = User
+        fields = ['new_password1', 'new_password2']
