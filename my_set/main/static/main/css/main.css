@@ -1,5 +1,6 @@
 html {
     overflow: hidden;
+    overflow-y: auto;
 }
 a {
     color: rgb(88, 68, 121);
@@ -48,10 +49,10 @@ ul {
     padding: 0 2rem;
 }
 .input-group-text {
-    background: #f7ba5b !important;
-    color: white !important;
-    border: 0 !important;
-    border-radius: 0.25rem 0 0 0.25rem !important;
+    background: #f7ba5b;
+    color: white;
+    border: 0;
+    border-radius: 0.25rem 0 0 0.25rem;
 }
 .input_user,
 .input_pass:focus {
@@ -166,7 +167,6 @@ i .fa-user {
 .container-main {
     position: relative;
     height: 88vh;
-    overflow: auto;
     padding: 0px 10px;
 }
 .container-main button {
@@ -259,7 +259,7 @@ i .fa-user {
     width: 50%;
 }
 .add-block-form {
-    width: 60%;
+    width: 100%;
     overflow: auto;
 }
 .add-input-block {
@@ -321,14 +321,8 @@ i .fa-user {
     height: 100%;
     width: 100%;
 }
-.project-cont {
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    overflow: auto; 
-}
 .back-btn-sets {
-    position: absolute;
+    position: fixed;
     background-color:#b2b0bd;
     top: 83%;
     left: 5%;
@@ -370,4 +364,14 @@ i .fa-user {
     padding: 15px 50px;
     top: 25%;
     left: 0%;
+}
+.container-add-project {
+    position: relative;
+    width: 50%;
+    left: 25%;
+}
+.sett-field {
+    width: 94%;
+    height: 50px;
+    font-size: 20px;
 }

@@ -35,7 +35,7 @@ class Project(models.Model):
     sets = models.ManyToManyField('MySets', blank=True, related_name='projects')
 
     def __str__(self):
-        return self.title
+        return self.title 
     
 
 class MySets(models.Model):

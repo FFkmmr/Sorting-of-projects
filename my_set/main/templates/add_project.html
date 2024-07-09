@@ -3,13 +3,16 @@
 {% block title %}Add Project{% endblock title %}
 
 {% block content %}
-<div class="container project-cont">
+<div style="margin-top: 65px; width: 100%;"> 
     <div class="row">
-        <div class="col-md-12" style="margin-bottom: 180px;">
-            <h1 style="position: relative; left: 18%; margin-bottom: 30px;">Add Project </h1>
-            <form action="" method='POST' style="position: relative; left: 20%;">
+        <div style="height: 100px; width: 100%; background-color: rgb(219, 166, 146);">
+            <h1 style="position: relative; top: 20px; left: 43%; color: white;">Add Project Form</h1>
+        </div>
+        <div class="container-add-project">
+            <br><br><br>
+            <form action="" method='POST' style="position: relative; margin-bottom: 180px;">
                 {% csrf_token %}
-                <div class="input-group mb-3">
+                <div class="input-group mb-4">
                     <div class="input-group-append">    
                         <span class="input-group-text material-symbols-outlined">Title</span>
                     </div>
@@ -21,68 +24,73 @@
                     </div>
                     {{form.url}}
                 </div>
-                <div class="input-group mb-2 block_">
-                    <div class="input-group-append">
-                        <span class="input-group-text material-symbols-outlined" style="float: left;">Settings</span>
-                        <h5>Enter your technologies:</h5><br>
+
+                <div class="row" style="height: 360px; margin-bottom: 25px; margin-top: 22px; padding-top: 22px; border: 2px solid rgb(197, 197, 197);">
+                    <div class="col-lg-6 mb-2 block_">
+                        <div class="input-group-append">
+                            <span class="input-group-text material-symbols-outlined" style="float: left; margin-right: 10px;">Settings</span>
+                            <h5 style="font-size: 25px; width: 100%;">Enter your technologies:</h5><br>
+                        </div>
+                        <div class="add-block-form">
+                            {% for technology in form.technologies %}
+                            {{ technology }}
+                            {% if forloop.counter|divisibleby:5 %}
+                                <span><br></span>
+                            {% endif %}
+                            {% endfor %}
+                        </div> <br>
+                        <div>
+                            {{ form.new_technologies }}
+                        </div>
                     </div>
-                    <div class="add-block-form">
-                     {% for technology in form.technologies %}
-                        {{ technology }}
-                        {% if forloop.counter|divisibleby:5 %}
-                            <span><br></span>
-                        {% endif %}
-                     {% endfor %}
-                    </div> <br>
-                    <div>
-                        {{ form.new_technologies }}
+                    <div class="col-lg-6 mb-2 block_">
+                        <div class="input-group-append">
+                            <span class="input-group-text material-symbols-outlined" style="float: left; margin-right: 10px;">Construction</span>
+                            <h5 style="font-size: 25px; width: 100%;">Enter your industries:</h5><br>
+                        </div>
+                        <div class="add-block-form">
+                        {% for industry in form.industries %}
+                            {{ industry }}
+                            {% if forloop.counter|divisibleby:5 and not forloop.last %}
+                                <span><br></span>
+                            {% endif %}
+                            {% endfor %}
+                        </div> <br>
+                        <div>
+                            {{ form.new_industries }}
+                        </div>
+                    </div>
+                    <div class="col-lg-8 mb-2 block_" style="position: relative; left: 15%;">
+                        <div class="input-group-append" style="position: relative; left: 29%;">
+                            <span class="input-group-text material-symbols-outlined" style="float: left; margin-right: 10px;">Widgets</span>
+                            <h5 style="font-size: 25px; width: 100%;">Enter your sets:</h5><br>
+                        </div>
+                        <div class="add-block-form">
+                        {% for set in form.sets %}
+                            {{ set }}
+                            {% if forloop.counter|divisibleby:5 and not forloop.last %}
+                                <span><br></span>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
+
                 <div class="input-group mb-2">
                     <div class="input-group-append">
                         <span class="input-group-text material-symbols-outlined">Description</span>
                     </div>
-                    {{form.description}}
+                    {{ form.description }}
                 </div>
-                <div class="input-group mb-2 block_">
-                    <div class="input-group-append">
-                        <span class="input-group-text material-symbols-outlined" style="float: left;">Construction</span>
-                        <h5>Enter your industries:</h5><br>
-                    </div>
-                    <div class="add-block-form">
-                    {% for industry in form.industries %}
-                        {{ industry }}
-                        {% if forloop.counter|divisibleby:5 and not forloop.last %}
-                            <span><br></span>
-                        {% endif %}
-                     {% endfor %}
-                    </div> <br>
-                    <div>
-                        {{ form.new_industries }}
-                    </div>
-                </div>
-                <div class="input-group mb-2 block_">
-                    <div class="input-group-append">
-                        <span class="input-group-text material-symbols-outlined" style="float: left;">Widgets</span>
-                        <h5>Enter your sets:</h5><br>
-                    </div>
-                    <div class="add-block-form">
-                    {% for set in form.sets %}
-                        {{ set }}
-                        {% if forloop.counter|divisibleby:5 and not forloop.last %}
-                            <span><br></span>
-                        {% endif %}
-                     {% endfor %}
-                    </div>
-                </div> <br>
-                <div class="input-group mb-2">
+                
+                <div class="input-group mb-5" style="position: relative; left: 45%;">
                     <div class="input-group-append">
                         <span class="material-symbols-outlined">lock</span>
                     </div>
-                    <h5>Private_</h5> 
+                    <h5 style="margin-right: 10px;">Private</h5> 
                     {{form.is_private}}
                 </div>
-                <button type="submit" class="btn btn-primary btn-sm" value=""> Save</button>
+                <button type="submit" class="btn btn-success btn-sm" style="position: relative; left: 37%; border: 2px solid rgb(255, 208, 208); background-color: rgb(255, 191, 155); color: rgb(255, 255, 255); height: 70px; width: 260px; font-size: 30px;" value=""> Save</button>
             </form>
         </div>
     </div>
