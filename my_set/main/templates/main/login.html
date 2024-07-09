@@ -9,7 +9,7 @@
 		<div class="d-flex justify-content-center">
 
 
-			<h3 id="form-title">LOGIN</h3>
+			<h3 id="form-title">Login</h3>
 		</div>
 		<div class="d-flex justify-content-center form_container">
 			<form method="POST" action="">
@@ -38,10 +38,10 @@
 		{% endfor %} 
 
 		<div class="mt-4">
-			<div class="d-flex justify-content-center links">
-				Don't have an account? <a href="{% url 'register' %}" class="ml-2">Sign Up</a>
+			<div class="d-flex justify-content-center links" style="color: white;">
+				Don't have an account? <a href="{% url 'register' %}" style="margin-left: 8px; color: rgb(66, 66, 66);">Sign Up</a>
 			</div>
-	
+			<div class="d-flex justify-content-center links" style="color: white;">or  <a href="{% url 'change_password_message' %}" style="margin-left: 10px; color: rgb(66, 66, 66);">change your password</a></div>
 		</div>
 	</div>
 </div>

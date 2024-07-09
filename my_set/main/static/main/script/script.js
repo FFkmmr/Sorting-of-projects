@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const technologyFilterInput = document.getElementById('technologyFilter');
     const resetIndustryFilterBtn = document.getElementById('resetIndustryFilterBtn');
     const resetTechnologyFilterBtn = document.getElementById('resetTechnologyFilterBtn');
+    const searchInput = document.getElementById('search');
     const industryList = document.getElementById('industryList');
     const technologyList = document.getElementById('technologyList');
     const industryCheckboxes = document.querySelectorAll('.industry-checkbox');
@@ -12,13 +13,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const industries = Array.from(industryList.getElementsByTagName('li'));
     const technologies = Array.from(technologyList.getElementsByTagName('li'));
-    
+
     function getCookie(name) {
         let cookieValue = null;
+
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
+        
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
+               
                 if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
@@ -28,15 +32,21 @@ document.addEventListener('DOMContentLoaded', function() {
         return cookieValue;
     }
 
+
     resetFilter(industryFilterInput, industries);
     resetFilter(technologyFilterInput, technologies);
+
+
     function filterList(input, items) {
         const filterText = input.value.toLowerCase();
+      
         items.forEach(item => {
             const label = item.querySelector('label');
             item.style.display = label.textContent.toLowerCase().includes(filterText) ? 'block' : 'none';
         });
     }
+
+
     function resetFilter(input, items) {
         if (input.tagName.toLowerCase() === 'input') {
             input.value = '';
@@ -51,20 +61,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     checkbox.checked = false;
                 }
             }
-            item.style.display = 'block'; 
         });
     }
+    
+
     industryFilterInput.addEventListener('input', () => filterList(industryFilterInput, industries));
     technologyFilterInput.addEventListener('input', () => filterList(technologyFilterInput, technologies));
     resetIndustryFilterBtn.addEventListener('click', () => resetFilter(industryFilterInput, industries));
     resetTechnologyFilterBtn.addEventListener('click', () => resetFilter(technologyFilterInput, technologies));
 
     var publicButton = document.querySelector('.custom-btn[data-value="Public"]');
+    
     if (publicButton) {
         publicButton.classList.add('active');  }
+    
+    
     var buttons = document.querySelectorAll('.custom-btn');
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
+          
             if (!this.classList.contains('active')) {
                 buttons.forEach(function(btn) {
                     btn.classList.remove('active');
@@ -73,11 +88,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+
     function getActiveButtonValue() {
         var activeButton = document.querySelector('.custom-btn.active');
-        return activeButton.getAttribute('data-value');
+        if (activeButton) {
+            return activeButton.getAttribute('data-value');
+        } else {
+            console.error('No active button found');
+            return null;
+        }
     }
 
+
+    updateProjects()
+    searchInput.addEventListener('input', updateProjects );
     industryCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateProjects);
     });
@@ -88,9 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('click', updateProjects);
     });
 
+
     function updateProjects() {
         const industryCheckboxes = document.querySelectorAll('.industry-checkbox');
         const technologyCheckboxes = document.querySelectorAll('.technology-checkbox');
+        const inputValue = document.getElementById('search').value;
         var activeButtonValue = getActiveButtonValue()
 
         const selectedIndustries = Array.from(industryCheckboxes)
@@ -109,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
             body: JSON.stringify({
+                input_val: inputValue,
                 industries: selectedIndustries,
                 technologies: selectedTechnologies,
                 active_button: activeButtonValue,
@@ -118,11 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             const projectContainer = document.getElementById('projects');
             projectContainer.innerHTML = data.html;
-
             })
         .catch(error => console.error('Error:', error));
     }
-
-
 });
 

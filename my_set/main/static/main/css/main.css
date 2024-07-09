@@ -357,3 +357,17 @@ i .fa-user {
     height: 40px;
     z-index: 100;
 }
+.linkedin-reg {
+    position: relative;
+    border-radius: 100px;
+    width: 80%;
+    height: 50px;
+    margin-top: 10px;
+    left: 10%;
+}
+.linkedin-reg a {
+    position: relative;
+    padding: 15px 50px;
+    top: 25%;
+    left: 0%;
+}
