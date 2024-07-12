@@ -12,22 +12,39 @@
             <br><br><br>
             <form action="" method='POST' style="position: relative; margin-bottom: 180px;">
                 {% csrf_token %}
-                <div class="input-group mb-4">
-                    <div class="input-group-append">    
-                        <span class="input-group-text material-symbols-outlined">Title</span>
+                <div style="float: left;">
+                    <div class="input-group mb-4">
+                        <div class="">    
+                            <span class="input-group-text material-symbols-outlined">Title</span>
+                            <span style="font-size: 25px;">Title:</span>
+                        </div>
+                        {{form.title}}
                     </div>
-                    {{form.title}}
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <span class="input-group-text material-symbols-outlined">Link</span>
+                    <div class="input-group mb-4">
+                        <div class="">
+                            <span class="input-group-text material-symbols-outlined">Link</span>
+                            <span style="font-size: 25px;">Link:</span>
+                        </div>
+                        {{form.url}}
                     </div>
-                    {{form.url}}
+                    <div class=" mb-4 block_" style="">
+                        <div class="" style="position: relative; ">
+                            <span class="input-group-text material-symbols-outlined" style="float: left; margin-right: 10px;">Widgets</span>
+                            <h5 style="font-size: 25px; width: 100%;">Enter your sets:</h5><br>
+                        </div>
+                        <div class="add-block-form">
+                        {% for set in form.sets %}
+                            {{ set }}
+                            {% if forloop.counter|divisibleby:5 and not forloop.last %}
+                                <span><br></span>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-
-                <div class="row" style="height: 360px; margin-bottom: 25px; margin-top: 22px; padding-top: 22px; border: 2px solid rgb(197, 197, 197);">
-                    <div class="col-lg-6 mb-2 block_">
-                        <div class="input-group-append">
+                <div class="row" style="height: 400px; margin-bottom: 25px; margin-top: 22px; padding-top: 22px; border: 2px solid rgb(197, 197, 197);">
+                    <div class="mb-2 block_">
+                        <div class="">
                             <span class="input-group-text material-symbols-outlined" style="float: left; margin-right: 10px;">Settings</span>
                             <h5 style="font-size: 25px; width: 100%;">Enter your technologies:</h5><br>
                         </div>
@@ -43,8 +60,8 @@
                             {{ form.new_technologies }}
                         </div>
                     </div>
-                    <div class="col-lg-6 mb-2 block_">
-                        <div class="input-group-append">
+                    <div class="mb-2 block_">
+                        <div class="">
                             <span class="input-group-text material-symbols-outlined" style="float: left; margin-right: 10px;">Construction</span>
                             <h5 style="font-size: 25px; width: 100%;">Enter your industries:</h5><br>
                         </div>
@@ -60,31 +77,16 @@
                             {{ form.new_industries }}
                         </div>
                     </div>
-                    <div class="col-lg-8 mb-2 block_" style="position: relative; left: 15%;">
-                        <div class="input-group-append" style="position: relative; left: 29%;">
-                            <span class="input-group-text material-symbols-outlined" style="float: left; margin-right: 10px;">Widgets</span>
-                            <h5 style="font-size: 25px; width: 100%;">Enter your sets:</h5><br>
-                        </div>
-                        <div class="add-block-form">
-                        {% for set in form.sets %}
-                            {{ set }}
-                            {% if forloop.counter|divisibleby:5 and not forloop.last %}
-                                <span><br></span>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
                 </div>
-
                 <div class="input-group mb-2">
-                    <div class="input-group-append">
+                    <div class="">
                         <span class="input-group-text material-symbols-outlined">Description</span>
                     </div>
                     {{ form.description }}
                 </div>
                 
                 <div class="input-group mb-5" style="position: relative; left: 45%;">
-                    <div class="input-group-append">
+                    <div class="">
                         <span class="material-symbols-outlined">lock</span>
                     </div>
                     <h5 style="margin-right: 10px;">Private</h5> 
