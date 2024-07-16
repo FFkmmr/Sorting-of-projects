@@ -2,7 +2,6 @@ import base64
 import json
 import requests
 
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,6 +12,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import (
     CreateUserForm,
@@ -25,7 +25,6 @@ from .forms import (
 from .models import Project, Technology, Industry, MySets
 from .service import mailgun_api, email_from, import_csv, secret_key, email_message, send_mail, generate_token
 import cryptocode
-
 
 
 def register_page(request: HttpRequest) -> HttpResponse:
@@ -42,6 +41,8 @@ def register_page(request: HttpRequest) -> HttpResponse:
                 user = form.cleaned_data.get('username')
                 messages.success(request, 'Account was created for ' + user)
                 return redirect('login')
+            else:
+                redirect('register')
             
         context = {'form': form}
         return render(request, 'main/register.html', context)
@@ -73,6 +74,13 @@ def index(request: HttpRequest) -> HttpResponse:
     technologies = Technology.objects.filter(project__user=request.user).distinct()
     industries = Industry.objects.filter(project__user=request.user).distinct()
     projects = Project.objects.filter(user=request.user)
+
+    for tech in technologies:
+        tech.user = request.user
+
+    for ind in industries:
+        ind.user = request.user
+
     context = {
         'technologies': technologies,
         'industries': industries,
@@ -195,7 +203,7 @@ def add_project(request: HttpRequest) -> HttpResponse:
 
             return redirect('home')
     else:
-        form = CreateProjectForm()
+        form = CreateProjectForm(user=request.user)
     return render(request, 'add_project.html', {'form': form})
 
 
@@ -220,7 +228,7 @@ def edit_project(request: HttpRequest, project_id: int) -> HttpResponse:
             form.save()
             return redirect('home')
     else:
-        form = CreateProjectForm(instance=project)
+        form = CreateProjectForm(instance=project, user=request.user)
     return render(request, 'edit_project.html', {'form': form})
 
 
@@ -235,12 +243,21 @@ def add_set(request: HttpRequest) -> HttpResponse:
             set.save()
             form.save_m2m()
 
-            generate_invitation_token(set.id, 'set', request.user.id)
+            generate_invitation_token(request ,set_id=set.id)
 
             return redirect('home')
     else:
         form = CreateProjectSet()
     return render(request, 'add_set.html', {'form': form})
+ 
+def generate_invitation_token(request, set_id: int):
+    user_id = request.user.id
+    type_ = 'set'
+    data = {'user_id': user_id, 'set_id': set_id, 'type': type_}
+    json_data = json.dumps(data)
+    encrypted_data = cryptocode.encrypt(json_data, secret_key)
+    token_base64 = base64.urlsafe_b64encode(encrypted_data.encode()).decode()
+    return render(request, 'share_link.html', {'token': token_base64})
 
 
 @login_required(login_url='login')
@@ -284,15 +301,6 @@ def project_set(request: HttpRequest, set_id: int) -> HttpResponse:
     return render(request, "main/one_set.html", context)
 
 
-def generate_invitation_token(request: HttpRequest, set_id: int) -> HttpResponse:
-    user_id = request.user.id
-    data = {'user_id': user_id, 'set_id': set_id}
-    json_data = json.dumps(data)
-    encrypted_data = cryptocode.encrypt(json_data, secret_key)
-    token_base64 = base64.urlsafe_b64encode(encrypted_data.encode()).decode()
-    return render(request, 'share_link.html', {'token': token_base64})
-
-
 def accept_invitation(request: HttpRequest, token: str) -> HttpResponse:
     try:
         token = base64.urlsafe_b64decode(token).decode()
@@ -322,6 +330,7 @@ def email_send(email: str, link: str) -> requests.Response:
   	return email_message(email, link, email_from, mailgun_api)
 
 
+@csrf_exempt
 def change_password_message(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = PasswordResetRequestForm(request.POST)
@@ -346,6 +355,7 @@ def change_password_message(request: HttpRequest) -> HttpResponse:
     return render(request, 'change_password_message.html', {'form': form})
 
 
+@csrf_exempt
 def password_reset_confirm(request: HttpRequest, uidb64: str, token: str) -> HttpResponse:
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -358,12 +368,25 @@ def password_reset_confirm(request: HttpRequest, uidb64: str, token: str) -> Htt
             form = SetPasswordForm(user, request.POST)
             if form.is_valid():
                 user = form.save()
+                print(" Password successfully changed for user:", user)
                 return redirect('login')
         else:
             form = SetPasswordForm(user)
-        return render(request, 'password_reset_confirm.html', {'form': form})
+        context = {
+            'form': form,
+            'uidb64': uidb64,
+            'token': token,
+        }
+        return render(request, 'password_reset_confirm.html', context)
     else:
         return render(request, 'login.html')
+    
+
+@login_required(login_url='login')
+def delete_set(request: HttpRequest, set_id: int) -> HttpResponse:
+    set_instance = get_object_or_404(MySets, id=set_id, user=request.user)
+    set_instance.delete()
+    return redirect('home')
 
 
 def profile(request):
