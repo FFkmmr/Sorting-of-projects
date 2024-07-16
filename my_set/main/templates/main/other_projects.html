@@ -1,25 +1,10 @@
-{% extends 'main/layout.html' %}
+{% for project in projects %}
+    <div class="row project_">
+        <div class="row">
 
-{% block title %} Set {{ set.name }} {% endblock %}
-
-{% block content %}
-<div class="one-set-container">
-    {% if accept %}
-    {% else %}
-        <a href="{% url 'add-user-set' set.id %}" class="btn btn-outline-warning add-user-for-set">Add User</a>
-    {% endif %}
-    
-    {% for project in projects %}
-        <div class="row project_">
             <div class="box col-sm-2" style="padding-top: 20px;">Title:</div>
             <div class="box col-sm-10">
-            {% if accept %}
                 <div class="title_">{{ project.title }}</div>
-            {% else %}
-                <div class="edit-project-button"><a href="{% url 'edit_project' project.id %}" class="btn btn-outline-secondary">Edit</a></div>
-                <div class="delete-project-button" style="left: 84%;"><a href="{% url 'delete_project' project.id %}" class="btn btn-outline-danger ">Delete</a></div>
-                <div class="title_" style="left: -125px; position: relative;">{{ project.title }}</div>
-            {% endif %}
             </div>
             <div class="box col-sm-2">Industries:</div>
             <div class="box col-sm-10 industries_">
@@ -39,14 +24,7 @@
             </div>
             <div class="box col-sm-2">Url:</div>
             <div class="box col-sm-10 url_"><a href="" class="url_">{{ project.url }}</a></div>   
-        </div> 
-    {% empty %}
-        <li>No projects in this set.</li>
-    {% endfor %}
-</div>
-
-<a href="/" class="btn btn-outline-secondary back-btn-sets">
-    <span class="material-symbols-outlined back-btn">undo</span>
-</a>
-
-{% endblock %}
+        </div>
+    </div> 
+{% endfor %}
+ 

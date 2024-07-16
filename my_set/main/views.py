@@ -92,24 +92,42 @@ def project_filter_view(request: HttpRequest) -> JsonResponse:
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        filters = {'user': request.user}
-        
+        sets_filters = { 'user': request.user }
+        filters = {}
+        other_filtered_projects = []        
+
 
         if selected_industries:
             filters['industries__name__in'] = selected_industries
+        
         if selected_technologies:
             filters['technologies__name__in'] = selected_technologies
+        
         if active_button == 'Public':
             filters['is_private'] = False
-        elif active_button == 'Private':
-            filters['is_private'] = True
+            filters.setdefault('user', request.user)
 
-        sets_filters = {
-            'user': request.user,
-        }
+        if active_button == 'Private':
+            filters['is_private'] = True
+            filters.setdefault('user', request.user)
+
+        
         projects = Project.objects.filter(**filters).distinct()
         sets = MySets.objects.filter(**sets_filters).distinct()
+
         
+        if active_button == 'Other':
+            for project in projects:
+                if project.sets.exists():
+                    for set in project.sets.all():
+                        if request.user in set.allowed_for.all():
+                            other_filtered_projects.append(project.id)
+                            break
+                else: 
+                    filters['id__in'] = other_filtered_projects
+        projects = Project.objects.filter(**filters).distinct()
+
+
         if input_val:
             for term in input_val.split():
                 projects = projects.filter(title__icontains=term.strip())
@@ -121,6 +139,8 @@ def project_filter_view(request: HttpRequest) -> JsonResponse:
         
         if active_button == 'MySets':
             html = render_to_string('main/sets.html', context)
+        elif active_button == 'Other':
+            html = render_to_string('main/other_projects.html', context)
         else:
             html = render_to_string('main/projects.html', context)
         return JsonResponse({'html': html})
@@ -244,15 +264,21 @@ def edit_project_set(request: HttpRequest, set_id: int) -> HttpResponse:
 @login_required(login_url='login')
 def project_set(request: HttpRequest, set_id: int) -> HttpResponse:
     set_instance = get_object_or_404(MySets, id=set_id)
-
-    if set_instance.is_private and set_instance.user != request.user and request.user not in set_instance.allowed_for.all():
+    if set_instance.is_private and set_instance.user != request.user:
         return HttpResponseForbidden("You do not have access to this set.")
+
+    # Извлекаем переменную accept из сессии
+    accept = request.session.get('accept', False)
+    # Удаляем переменную из сессии после использования
+    if 'accept' in request.session:
+        del request.session['accept']
 
     projects = set_instance.projects.all()
     context = {
         'projects': projects,
         'set': set_instance,
         'handler': set_instance.name,
+        'accept': accept,
     }
     return render(request, "main/one_set.html", context)
 
@@ -274,6 +300,9 @@ def accept_invitation(request: HttpRequest, token: str) -> HttpResponse:
         set_id = data['set_id']
         set_instance = get_object_or_404(MySets, id=set_id)
         set_instance.allowed_for.add(request.user)
+
+        request.session['accept'] = True
+        
         return redirect('set', set_id=set_id)
     except Exception as e:
         return HttpResponseForbidden(e)
