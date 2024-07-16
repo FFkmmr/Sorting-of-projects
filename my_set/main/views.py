@@ -363,3 +363,18 @@ def password_reset_confirm(request: HttpRequest, uidb64: str, token: str) -> Htt
         return render(request, 'password_reset_confirm.html', {'form': form})
     else:
         return render(request, 'login.html')
+
+
+def profile(request):
+    user = request.user
+    context = {
+        'user': user
+    }
+    return render(request, 'profile.html', context)
+
+
+def edit_name(request):
+    user = request.user
+    context = { 'user': user }
+
+    return render(request, 'edit_name.html', context)
