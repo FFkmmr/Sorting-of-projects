@@ -376,3 +376,35 @@ i .fa-user {
     height: 50px;
     font-size: 20px;
 }
+.profile_container {
+    position: absolute;
+    overflow: auto;
+    width: 55%;
+    left: 50%;
+    height: 80vh;
+    top: 20%;
+    background-color: #e7e7e7;
+    transform: translateX(-50%);
+}
+.back-profile {
+    position: absolute;
+    height: 20vh;
+    width: 55vw;
+    left: 50%;
+    background-image: url('https://oir.mobi/uploads/posts/2019-12/1576647667_38-85.jpg');
+    background-size: cover;
+    background-position: center;
+    transform: translateX(-50%);
+}
+.avatar {
+    background-color: #f3f3f3;
+    position: absolute;
+    font-size: 200px;
+    top: 100px;
+    left: 25%;
+    border-radius: 100%;
+    z-index: 1;
+}
+.h-1 {
+    height: 100px;
+}

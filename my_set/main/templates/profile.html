@@ -1,0 +1,23 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<span class="material-symbols-outlined avatar">account_circle</span>
+<div style="position:relative; margin:0; top:62px; height:100vh; width:50%; left:25%;">
+    <div style="position: relative; left: 25%; top: 10%;">
+        <div style="font-size: 40px;">{{ user.username }} <a href="{% url 'change_username' %}" class="edit-set-btn btn btn-secondary" style="width: 30px; height: 30px;"><span class="material-symbols-outlined" style="font-size: 20px; left: -7px; top: -2px; position: relative;">edit</span></a></div>
+        
+        <div style="font-size: 20px;">{{ user.date_joined|date:"d-m-Y" }}</div>
+    </div>
+    <div style="position: relative; left: 5%; top: 20%;">
+        <div style="font-size: 20px; width: 350px; padding: 5px;">Email: <div style="margin-top: 10px; border-radius: 10px; padding: 8px; background-color: rgb(226, 226, 226);">{{ user.email }}</div></div>
+        <a href="{% url 'change_password_message' %}" class="btn btn-outline-dark" style="position: relative; top: 50px;">Change password</a>
+    </div>
+
+</div>
+
+<a href="/" class="btn btn-outline-secondary back-btn-sets">
+    <span class="material-symbols-outlined back-btn">undo</span>
+</a>
+{% endblock %}
