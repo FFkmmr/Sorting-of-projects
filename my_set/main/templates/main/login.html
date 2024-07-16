@@ -36,7 +36,12 @@
 		{% for message in messages %}
 			<p id="messages" class="alert alert-warning">{{ message }}</p>
 		{% endfor %} 
-
+		<div class="linkedin-reg" style="background-color: #ade8ff;">
+			<a href="{% url 'social:begin' 'linkedin-oauth2' %}" style="color: rgb(0, 0, 0);"><img src="https://cdn-icons-png.freepik.com/256/123/123718.png?semt=ais_hybrid" alt="LinkedIn" style="width: 22px;"> Login with LinkedIn</a>
+		</div>
+		<div class="linkedin-reg" style="background-color: #ffffff;">
+			<a href="{% url 'social:begin' 'github' %}" style="color: rgb(0, 0, 0);"><img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="GitHub" style="width: 30px;"> Login with GitHub</a>
+		</div>
 		<div class="mt-4">
 			<div class="d-flex justify-content-center links" style="color: white;">
 				Don't have an account? <a href="{% url 'register' %}" style="margin-left: 8px; color: rgb(66, 66, 66);">Sign Up</a>

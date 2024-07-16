@@ -20,4 +20,5 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
     path('change-password-message/', views.change_password_message, name='change_password_message'),
     path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    path('delete-set/<int:set_id>/', views.delete_set, name='delete-set'),
 ]

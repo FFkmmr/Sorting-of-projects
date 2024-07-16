@@ -9,7 +9,7 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
-
+    
     placeholders = {
         'username': 'Username..',
         'email': 'Email..',
@@ -49,6 +49,11 @@ class CreateProjectForm(ModelForm):
             'industries': forms.CheckboxSelectMultiple(),
             'sets': forms.CheckboxSelectMultiple(),
         }
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(CreateProjectForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['sets'].queryset = MySets.objects.filter(user=user)
 
 
 class CreateProjectSet(ModelForm):

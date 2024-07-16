@@ -165,6 +165,7 @@ i .fa-user {
     position: relative;
 }
 .container-main {
+    overflow-y: auto;
     position: relative;
     height: 88vh;
     padding: 0px 10px;
@@ -323,7 +324,7 @@ i .fa-user {
 }
 .back-btn-sets {
     position: fixed;
-    background-color:#b2b0bd;
+    background-color:#d6cab8;
     top: 83%;
     left: 5%;
     width: 100px;

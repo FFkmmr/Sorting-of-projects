@@ -10,7 +10,7 @@ class Technology(models.Model):
     
     @property
     def num_projects(self):
-        return self.project_set.count()
+        return self.project_set.filter(user=self.user).count() if hasattr(self, 'user') else self.project_set.count()
 
 
 class Industry(models.Model):
@@ -21,7 +21,7 @@ class Industry(models.Model):
     
     @property
     def num_projects(self):
-        return self.project_set.count()
+        return self.project_set.filter(user=self.user).count() if hasattr(self, 'user') else self.project_set.count()
 
 
 class Project(models.Model):
