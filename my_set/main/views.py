@@ -20,6 +20,7 @@ from .forms import (
     CreateProjectSet,
     PasswordResetRequestForm,
     SetPasswordForm,
+    UsernameChangeForm
 )
 from .models import Project, Technology, Industry, MySets
 from .service import mailgun_api, email_from, import_csv, secret_key, email_message, send_mail, generate_token
@@ -372,9 +373,17 @@ def profile(request):
     }
     return render(request, 'profile.html', context)
 
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import UserChangeForm
 
-def edit_name(request):
-    user = request.user
-    context = { 'user': user }
-
-    return render(request, 'edit_name.html', context)
+@login_required
+def change_username(request):
+    if request.method == 'POST':
+        form = UsernameChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, request.user) 
+            return redirect('profile')
+    else:
+        form = UserChangeForm(instance=request.user)
+    return render(request, 'edit_name.html', {'form': form})

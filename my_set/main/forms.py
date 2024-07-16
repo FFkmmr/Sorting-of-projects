@@ -53,7 +53,14 @@ class CreateProjectSet(ModelForm):
 class PasswordResetRequestForm(forms.Form):
     email = forms.EmailField(label="Email")
 
+
 class SetPasswordForm(DjangoSetPasswordForm):
     class Meta:
         model = User
         fields = ['new_password1', 'new_password2']
+
+
+class UsernameChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username']
