@@ -51,7 +51,7 @@ The platform provides tools to organize, filter, search, and share projects acro
 ### Demo Videos
 Below are demo videos of the platform (at the time of recording, there were some minor UI bugs that have since been fixed — trust me 😅):  
 
-1. [Overview Part 1](https://drive.google.com/uc?export=view&id=1Mh4cUgBXo89twYR0PMNxtUDBezq4ckKM)  
-2. [Overview Part 2](https://drive.google.com/uc?export=view&id=1RNdEG_8QPes2F4tIr0OFYXDvFP7cWYqH)  
-3. [Overview Part 3](https://drive.google.com/uc?export=view&id=1RZQHklk8qgWBXN0r8gLIVyIluMVrvj-X)  
-4. [Overview Part 4](https://drive.google.com/uc?export=view&id=1xhwX1WP6hPId8SrKaBw2I36VeJlpKxbe)  
+1. [Overview Part 1](https://drive.google.com/file/d/1Mh4cUgBXo89twYR0PMNxtUDBezq4ckKM/view?usp=sharing)  
+2. [Overview Part 2](https://drive.google.com/file/d/1RNdEG_8QPes2F4tIr0OFYXDvFP7cWYqH/view?usp=drive_link)  
+3. [Overview Part 3](https://drive.google.com/file/d/1RZQHklk8qgWBXN0r8gLIVyIluMVrvj-X/view?usp=sharing)  
+4. [Overview Part 4](https://drive.google.com/file/d/1xhwX1WP6hPId8SrKaBw2I36VeJlpKxbe/view?usp=sharing)  
